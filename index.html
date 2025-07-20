@@ -105,6 +105,72 @@
             background-color: #fff;
             color: #6c757d;
         }
+        
+        /* Custom dashed border */
+        .border-dashed-danger {
+            border: 2px dashed var(--bs-danger);
+        }
+
+        /* Styles for Featured Card */
+        .featured-card {
+            position: relative;
+            overflow: hidden;
+        }
+        .featured-card .card-img-top {
+            filter: blur(4px);
+        }
+        .featured-card .badge {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1rem;
+            padding: 0.75rem 1.25rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+                box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.7);
+            }
+            70% {
+                transform: translate(-50%, -50%) scale(1);
+                box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+            }
+        }
+        
+        /* Dotted borders for menus */
+        .permission-group {
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+            border-style: dotted;
+            border-width: 2px;
+        }
+        .permission-admin { border-color: var(--bs-success); }
+        .permission-auth { border-color: var(--bs-danger); }
+        .permission-guest { border-color: var(--bs-secondary); }
+
+        .visibility-note {
+            font-size: 0.75rem;
+            font-style: italic;
+            margin-top: 0.5rem;
+            display: block;
+        }
+        .visibility-admin { color: var(--bs-success); }
+        .visibility-auth { color: var(--bs-danger); }
+        .visibility-guest { color: var(--bs-secondary); }
+        
+        .border-dotted {
+            border-style: dotted !important;
+            border-width: 2px !important; /* Increased thickness */
+        }
+
     </style>
 </head>
 <body>
@@ -120,28 +186,47 @@
                     UniFinder
                 </a>
 
-                <!-- Botão do Menu Mobile -->
-                <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
-                    <i class="bi bi-list fs-2"></i>
-                </button>
-
                 <!-- Menu Desktop -->
                 <div class="d-none d-lg-flex align-items-center">
                     <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                         <li><a href="#" onclick="showPage('page-objetos')" class="nav-link px-2 link-dark">Objetos Perdidos</a></li>
                         <li><a href="#" onclick="showPage('page-objetos')" class="nav-link px-2 link-dark">Objetos Achados</a></li>
                     </ul>
-                    <div class="dropdown text-end">
+                    
+                    <!-- Guest Links -->
+                    <div class="border border-secondary border-dotted rounded-pill px-1 py-1 d-flex align-items-center me-3">
+                        <a href="#" onclick="showPage('page-login')" class="nav-link px-2 link-dark">Login</a>
+                        <a href="#" class="nav-link px-2 link-dark">Criar Conta</a>
+                    </div>
+
+                    <!-- Authenticated User Dropdown -->
+                    <div class="dropdown text-end border border-danger border-dotted rounded-pill p-1">
                         <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                             <img src="https://picsum.photos/32/32" alt="mdo" width="32" height="32" class="rounded-circle">
                         </a>
-                        <ul class="dropdown-menu text-small">
-                            <li><a class="dropdown-item" href="#" onclick="showPage('page-admin-panel')">Painel do Admin</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#" onclick="showPage('page-login')">Logout</a></li>
+                        <ul class="dropdown-menu text-small p-2">
+                            <li>
+                                <div class="permission-group permission-admin">
+                                    <a class="dropdown-item" href="#" onclick="showPage('page-admin-panel')">Painel do Admin</a>
+                                    <em class="visibility-note visibility-admin px-3">visível: admin</em>
+                                </div>
+                            </li>
+                            <li><hr class="dropdown-divider my-1"></li>
+                            <li>
+                                <div class="permission-group permission-auth">
+                                    <a class="dropdown-item" href="#" onclick="showPage('page-objetos')">Objetos Acompanhados</a>
+                                    <a class="dropdown-item" href="#" onclick="showPage('page-login')">Logout</a>
+                                    <em class="visibility-note visibility-auth px-3">visível: autenticado</em>
+                                </div>
+                            </li>
                         </ul>
                     </div>
                 </div>
+                
+                <!-- Botão do Menu Mobile -->
+                <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+                    <i class="bi bi-list fs-2"></i>
+                </button>
             </div>
         </div>
     </header>
@@ -156,13 +241,27 @@
             <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                 <li class="nav-item"><a class="nav-link" href="#" onclick="showPage('page-objetos')">Objetos Perdidos</a></li>
                 <li class="nav-item"><a class="nav-link" href="#" onclick="showPage('page-objetos')">Objetos Achados</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Objetos Acompanhados</a></li>
                 <hr>
-                <!-- These are placeholders. In a real app, you'd show one set or the other based on auth state -->
-                <li class="nav-item"><a class="nav-link" href="#" onclick="showPage('page-login')">Login</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Criar Conta</a></li>
-                <li class="nav-item"><a class="nav-link" href="#" onclick="showPage('page-login')">Logout</a></li>
-                <li class="nav-item"><a class="nav-link fw-bold" href="#" onclick="showPage('page-admin-panel')">Painel do Admin</a></li>
+                <li class="nav-item">
+                    <div class="permission-group permission-admin">
+                        <a class="nav-link fw-bold" href="#" onclick="showPage('page-admin-panel')">Painel do Admin</a>
+                        <em class="visibility-note visibility-admin">visível: admin</em>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <div class="permission-group permission-auth">
+                        <a class="nav-link" href="#" onclick="showPage('page-objetos')">Objetos Acompanhados</a>
+                        <a class="nav-link" href="#" onclick="showPage('page-login')">Logout</a>
+                        <em class="visibility-note visibility-auth">visível: autenticado</em>
+                    </div>
+                </li>
+                 <li class="nav-item">
+                    <div class="permission-group permission-guest">
+                        <a class="nav-link" href="#" onclick="showPage('page-login')">Login</a>
+                        <a class="nav-link" href="#">Criar Conta</a>
+                        <em class="visibility-note visibility-guest">visível: visitante</em>
+                    </div>
+                </li>
             </ul>
         </div>
     </div>
@@ -176,6 +275,7 @@
         <section id="page-login" class="page">
             <div class="login-container text-center">
                 <h1 class="h3 mb-3 fw-bold">UniFinder</h1>
+                <em class="visibility-note visibility-guest text-center d-block mb-3">visível: visitante</em>
                 <h2 class="h4 mb-3 fw-normal">Login</h2>
                 <form>
                     <div class="form-floating mb-3">
@@ -204,6 +304,34 @@
 
         <!-- TELA INICIAL -->
         <section id="page-inicial" class="page">
+            
+            <!-- Seção: Objetos em Acompanhamento -->
+            <section class="mb-5 p-3 rounded border-dashed-danger">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h2 class="fw-bold fs-4 mb-0">Objetos em Acompanhamento</h2>
+                    <em class="text-danger small fst-italic">visível: autenticado</em>
+                </div>
+                <div class="horizontal-scroll-container">
+                    <!-- Card Destacado -->
+                    <div class="card shadow-sm featured-card" onclick="showPage('page-objeto-detalhes')">
+                        <img src="https://picsum.photos/300/200?random=10" class="card-img-top" alt="Objeto acompanhado">
+                        <div class="badge bg-dark text-light">Reivindicação Pendente</div>
+                        <div class="card-body">
+                            <h5 class="card-title">Mochila Preta</h5>
+                        </div>
+                        <div class="card-footer bg-success text-white">Achado</div>
+                    </div>
+                    <!-- Outros Cards -->
+                    <div class="card shadow-sm" onclick="showPage('page-objeto-detalhes')">
+                        <img src="https://picsum.photos/300/200?random=11" class="card-img-top" alt="Objeto acompanhado">
+                        <div class="card-body">
+                            <h5 class="card-title">Carregador de Notebook</h5>
+                        </div>
+                        <div class="card-footer bg-warning text-dark">Perdido</div>
+                    </div>
+                </div>
+            </section>
+
             <!-- Seção: Cadastro de objetos (Perdidos) -->
             <section class="mb-4">
                 <h5 class="fw-bold">Perdeu algum pertence na UNIRIO? Procure aqui!</h5>
@@ -333,6 +461,16 @@
                     <h5 class="fw-bold">Detalhes do Objeto</h5>
                     <p><strong>Local Encontrado:</strong> Biblioteca Central</p>
                     <p><strong>Data de Registro:</strong> 20/07/2025</p>
+                    <div class="mt-3">
+                        <h6 class="fw-bold">Categoria(s):</h6>
+                        <span class="badge bg-secondary">Utensílios</span>
+                        <span class="badge bg-secondary">Garrafas</span>
+                    </div>
+                    <div class="mt-3">
+                        <h6 class="fw-bold">Descritor(es):</h6>
+                        <span class="badge bg-info text-dark">Preto</span>
+                        <span class="badge bg-info text-dark">Adesivos</span>
+                    </div>
                     <hr>
                     <h5 class="fw-bold">Ações</h5>
                     <div class="d-grid gap-2">
@@ -352,9 +490,10 @@
                         </div>
                     </div>
                     <hr>
-                    <div class="input-group mt-3">
+                    <div class="input-group mt-3 permission-group permission-auth">
                         <input type="text" class="form-control" placeholder="Adicione um comentário...">
                         <button class="btn btn-outline-secondary" type="button">Enviar</button>
+                        <em class="visibility-note visibility-auth w-100 text-center">visível: autenticado</em>
                     </div>
                 </div>
             </div>
@@ -362,7 +501,10 @@
         
         <!-- TELA DE PAINEL DO ADMINISTRADOR -->
         <section id="page-admin-panel" class="page">
-            <h1 class="fw-bold fs-4 mb-4">Painel do Administrador</h1>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="fw-bold fs-4 mb-0">Painel do Administrador</h1>
+                <em class="visibility-note visibility-admin mb-0">visível: admin</em>
+            </div>
             
             <h2 class="fw-bold fs-5 mb-3">Gerenciar Localizações</h2>
             <div class="d-grid mb-4">
@@ -451,7 +593,7 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Tipo de objeto</label>
-                            <div>
+                            <div class="btn-group w-100" role="group">
                                 <input type="checkbox" class="btn-check" id="btn-check-perdido" autocomplete="off">
                                 <label class="btn btn-outline-primary" for="btn-check-perdido">Perdido</label>
 
@@ -462,11 +604,34 @@
                          <div class="mb-3">
                             <label for="filter-location" class="form-label">Localização</label>
                             <select class="form-select" id="filter-location">
-                                <option selected>Todas as localizações</option>
+                                <option selected>Todas</option>
                                 <option value="1">Prédio do CCH</option>
                                 <option value="2">Prédio do CCET</option>
                                 <option value="3">Biblioteca</option>
                             </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Categoria(s)</label>
+                            <div class="d-flex flex-wrap gap-2">
+                                <input type="checkbox" class="btn-check" id="cat-1" autocomplete="off"><label class="btn btn-sm btn-outline-secondary" for="cat-1">Eletrônicos</label>
+                                <input type="checkbox" class="btn-check" id="cat-2" autocomplete="off"><label class="btn btn-sm btn-outline-secondary" for="cat-2">Vestuário</label>
+                                <input type="checkbox" class="btn-check" id="cat-3" autocomplete="off"><label class="btn btn-sm btn-outline-secondary" for="cat-3">Material de Estudo</label>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Descritor(es)</label>
+                            <div class="d-flex flex-wrap gap-2">
+                                <input type="checkbox" class="btn-check" id="desc-1" autocomplete="off"><label class="btn btn-sm btn-outline-secondary" for="desc-1">Frágil</label>
+                                <input type="checkbox" class="btn-check" id="desc-2" autocomplete="off"><label class="btn btn-sm btn-outline-secondary" for="desc-2">Urgente</label>
+                                <input type="checkbox" class="btn-check" id="desc-3" autocomplete="off"><label class="btn btn-sm btn-outline-secondary" for="desc-3">Preto</label>
+                            </div>
+                        </div>
+                        <div class="permission-group permission-auth mt-3">
+                            <div class="form-check form-switch">
+                              <input class="form-check-input" type="checkbox" role="switch" id="filter-followed">
+                              <label class="form-check-label" for="filter-followed">Apenas objetos acompanhados</label>
+                            </div>
+                            <em class="visibility-note visibility-auth">visível: autenticado</em>
                         </div>
                     </form>
                 </div>
@@ -496,7 +661,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary">Cadastrar</button>
+                    <button type="button" class="btn btn-primary" onclick="createObjectAndShowDetails()">Cadastrar</button>
                 </div>
             </div>
         </div>
@@ -505,9 +670,10 @@
     <!-- Modal de Reivindicação de Objeto -->
     <div class="modal fade" id="claimObjectModal" tabindex="-1" aria-labelledby="claimObjectModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content">
+            <div class="modal-content permission-group permission-auth">
                 <div class="modal-header">
                     <h5 class="modal-title fw-bold" id="claimObjectModalLabel">Reivindicar Objeto</h5>
+                    <em class="visibility-note visibility-auth me-auto ms-2 mb-0">visível: autenticado</em>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -538,9 +704,10 @@
     <!-- Modal de Cadastro/Modificação de Localização -->
     <div class="modal fade" id="locationModal" tabindex="-1" aria-labelledby="locationModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
+            <div class="modal-content permission-group permission-admin">
                 <div class="modal-header">
                     <h5 class="modal-title fw-bold" id="locationModalLabel">Adicionar Localização</h5>
+                    <em class="visibility-note visibility-admin me-auto ms-2 mb-0">visível: admin</em>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -569,9 +736,10 @@
     <!-- Modal de Cadastro de Funcionário -->
     <div class="modal fade" id="employeeModal" tabindex="-1" aria-labelledby="employeeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
+            <div class="modal-content permission-group permission-admin">
                 <div class="modal-header">
                     <h5 class="modal-title fw-bold" id="employeeModalLabel">Adicionar Funcionário</h5>
+                    <em class="visibility-note visibility-admin me-auto ms-2 mb-0">visível: admin</em>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -601,6 +769,7 @@
 
         const mainHeader = document.querySelector('header');
         const mainFooter = document.querySelector('footer');
+        const createObjectModal = new bootstrap.Modal(document.getElementById('createObjectModal'));
 
         // Function to show a page and hide others
         function showPage(pageId) {
@@ -650,6 +819,12 @@
         // Function to go back to the previous page
         function goBack() {
             showPage(previousPage);
+        }
+        
+        // Function to handle the object creation and navigation
+        function createObjectAndShowDetails() {
+            createObjectModal.hide();
+            showPage('page-objeto-detalhes');
         }
 
         // Function to configure the location modal for either 'create' or 'edit' mode
