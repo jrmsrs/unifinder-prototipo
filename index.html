@@ -155,6 +155,9 @@
         .permission-admin { border-color: var(--bs-success); }
         .permission-auth { border-color: var(--bs-danger); }
         .permission-guest { border-color: var(--bs-secondary); }
+        .permission-primary { border-color: var(--bs-primary); }
+        .permission-non-responsible { border-color: #6f42c1; } /* Purple */
+
 
         .visibility-note {
             font-size: 0.75rem;
@@ -165,6 +168,8 @@
         .visibility-admin { color: var(--bs-success); }
         .visibility-auth { color: var(--bs-danger); }
         .visibility-guest { color: var(--bs-secondary); }
+        .visibility-primary { color: var(--bs-primary); }
+        .visibility-non-responsible { color: #6f42c1; } /* Purple */
         
         .border-dotted {
             border-style: dotted !important;
@@ -471,10 +476,35 @@
                         <span class="badge bg-info text-dark">Preto</span>
                         <span class="badge bg-info text-dark">Adesivos</span>
                     </div>
+                </div>
+            </div>
+            <!-- Seção Ações do Visitante -->
+            <div class="card shadow-sm mt-4 permission-group permission-non-responsible">
+                <div class="card-body">
+                     <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="fw-bold mb-0">Esse pertence é seu?</h5>
+                        <em class="visibility-note visibility-non-responsible mb-0">visível: não responsável</em>
+                    </div>
                     <hr>
-                    <h5 class="fw-bold">Ações</h5>
-                    <div class="d-grid gap-2">
+                    <div class="d-grid">
                          <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#claimObjectModal">Reivindicar Objeto</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Seção Ações do Responsável -->
+            <div class="card shadow-sm mt-4 permission-group permission-primary">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="fw-bold mb-0">Ações do Responsável</h5>
+                        <em class="visibility-note visibility-primary mb-0">visível: Responsável</em>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#finishObjectModal">Finalizar Objeto</button>
+                        <div>
+                            <button class="btn btn-outline-secondary border-0 fs-5"><i class="bi bi-pencil-square"></i></button>
+                            <button class="btn btn-outline-danger border-0 fs-5"><i class="bi bi-trash"></i></button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -494,6 +524,10 @@
                         <input type="text" class="form-control" placeholder="Adicione um comentário...">
                         <button class="btn btn-outline-secondary" type="button">Enviar</button>
                         <em class="visibility-note visibility-auth w-100 text-center">visível: autenticado</em>
+                    </div>
+                    <div class="mt-3 permission-group permission-guest text-center">
+                        <p class="mb-0"><a href="#" onclick="showPage('page-login')">Faça login</a> para adicionar um comentário.</p>
+                        <em class="visibility-note visibility-guest w-100 text-center">visível: visitante</em>
                     </div>
                 </div>
             </div>
@@ -670,10 +704,10 @@
     <!-- Modal de Reivindicação de Objeto -->
     <div class="modal fade" id="claimObjectModal" tabindex="-1" aria-labelledby="claimObjectModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content permission-group permission-auth">
+            <div class="modal-content permission-group permission-non-responsible">
                 <div class="modal-header">
                     <h5 class="modal-title fw-bold" id="claimObjectModalLabel">Reivindicar Objeto</h5>
-                    <em class="visibility-note visibility-auth me-auto ms-2 mb-0">visível: autenticado</em>
+                    <em class="visibility-note visibility-non-responsible me-auto ms-2 mb-0">visível: não responsável</em>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -696,6 +730,32 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                     <button type="button" class="btn btn-primary">Enviar Reivindicação</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal de Finalização de Objeto -->
+    <div class="modal fade" id="finishObjectModal" tabindex="-1" aria-labelledby="finishObjectModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content permission-group permission-primary">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold" id="finishObjectModalLabel">Finalizar Objeto</h5>
+                    <em class="visibility-note visibility-primary me-auto ms-2 mb-0">visível: Responsável</em>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Você está finalizando o registro do objeto: <strong>Garrafa Térmica</strong>.</p>
+                    <form>
+                        <div class="mb-3">
+                            <label for="finish-desc" class="form-label">Descrição da finalização</label>
+                            <textarea class="form-control" id="finish-desc" rows="3" placeholder="Descreva o que foi feito com o objeto."></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary">Confirmar Finalização</button>
                 </div>
             </div>
         </div>
