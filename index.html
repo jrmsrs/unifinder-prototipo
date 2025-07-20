@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniFinder - Layout</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Custom CSS for tweaks -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        main {
+            flex: 1;
+        }
+
+        /* Styles for the login page */
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+            padding: 15px;
+            margin: auto;
+        }
+
+        .horizontal-scroll-container {
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 1rem;
+        }
+
+        .horizontal-scroll-container .card {
+            flex: 0 0 75%;
+            max-width: 280px;
+            margin-right: 1rem;
+        }
+
+        .horizontal-scroll-container::-webkit-scrollbar {
+            display: none;
+        }
+        .horizontal-scroll-container {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        .offcanvas {
+            max-width: 80%;
+        }
+
+        .card-footer {
+            font-weight: 500;
+        }
+
+        /* Helper class to hide pages */
+        .page {
+            display: none;
+        }
+        .page.active {
+            display: block;
+        }
+
+        /* Style for the "ou" separator */
+        .separator {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: #6c757d;
+        }
+        .separator::before,
+        .separator::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .separator:not(:empty)::before {
+            margin-right: .25em;
+        }
+        .separator:not(:empty)::after {
+            margin-left: .25em;
+        }
+
+        /* Style for the fake search bar */
+        .fake-search-bar {
+            cursor: pointer;
+            border: 1px solid #ced4da;
+            padding: .75rem 1rem;
+            border-radius: .375rem;
+            background-color: #fff;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- =================================================================
+    HEADER & MENU LATERAL (Hidden on login page)
+    ================================================================== -->
+    <header class="p-3 mb-3 border-bottom bg-white sticky-top shadow-sm">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-between">
+                <!-- Logo -->
+                <a href="#" onclick="showPage('page-inicial')" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none fs-5 fw-bold">
+                    UniFinder
+                </a>
+
+                <!-- Botão do Menu Mobile -->
+                <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+                    <i class="bi bi-list fs-2"></i>
+                </button>
+
+                <!-- Menu Desktop -->
+                <div class="d-none d-lg-flex align-items-center">
+                    <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                        <li><a href="#" onclick="showPage('page-objetos')" class="nav-link px-2 link-dark">Objetos Perdidos</a></li>
+                        <li><a href="#" onclick="showPage('page-objetos')" class="nav-link px-2 link-dark">Objetos Achados</a></li>
+                    </ul>
+                    <div class="dropdown text-end">
+                        <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="https://picsum.photos/32/32" alt="mdo" width="32" height="32" class="rounded-circle">
+                        </a>
+                        <ul class="dropdown-menu text-small">
+                            <li><a class="dropdown-item" href="#" onclick="showPage('page-admin-panel')">Painel do Admin</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" onclick="showPage('page-login')">Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Menu Lateral (Offcanvas) -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title fw-bold" id="offcanvasNavbarLabel">UniFinder</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                <li class="nav-item"><a class="nav-link" href="#" onclick="showPage('page-objetos')">Objetos Perdidos</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" onclick="showPage('page-objetos')">Objetos Achados</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Objetos Acompanhados</a></li>
+                <hr>
+                <!-- These are placeholders. In a real app, you'd show one set or the other based on auth state -->
+                <li class="nav-item"><a class="nav-link" href="#" onclick="showPage('page-login')">Login</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Criar Conta</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" onclick="showPage('page-login')">Logout</a></li>
+                <li class="nav-item"><a class="nav-link fw-bold" href="#" onclick="showPage('page-admin-panel')">Painel do Admin</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- =================================================================
+    CONTEÚDO PRINCIPAL (GERENCIADO PELO JS)
+    ================================================================== -->
+    <main class="container my-4">
+        
+        <!-- TELA DE LOGIN -->
+        <section id="page-login" class="page">
+            <div class="login-container text-center">
+                <h1 class="h3 mb-3 fw-bold">UniFinder</h1>
+                <h2 class="h4 mb-3 fw-normal">Login</h2>
+                <form>
+                    <div class="form-floating mb-3">
+                        <input type="email" class="form-control" id="floatingInput" placeholder="nome@exemplo.com">
+                        <label for="floatingInput">Email ou usuário</label>
+                    </div>
+                    <div class="form-floating">
+                        <input type="password" class="form-control" id="floatingPassword" placeholder="Senha">
+                        <label for="floatingPassword">Senha</label>
+                    </div>
+                    <div class="text-end my-2">
+                        <a href="#" class="text-muted text-decoration-none small">Esqueci minha senha</a>
+                    </div>
+                    <button class="w-100 btn btn-lg btn-primary" type="button" onclick="showPage('page-inicial')">Login</button>
+                    
+                    <div class="separator my-3">ou</div>
+                    
+                    <button class="w-100 btn btn-lg btn-outline-secondary" type="button">
+                        <i class="bi bi-google me-2"></i> Entrar com Google
+                    </button>
+                    <hr class="my-4">
+                    <p class="text-muted">Não tem uma conta? <a href="#">Criar conta</a></p>
+                </form>
+            </div>
+        </section>
+
+        <!-- TELA INICIAL -->
+        <section id="page-inicial" class="page">
+            <!-- Seção: Cadastro de objetos (Perdidos) -->
+            <section class="mb-4">
+                <h5 class="fw-bold">Perdeu algum pertence na UNIRIO? Procure aqui!</h5>
+                <!-- Fake Search Bar to trigger modal -->
+                <div class="fake-search-bar my-3 d-flex justify-content-between align-items-center" data-bs-toggle="modal" data-bs-target="#searchModal">
+                    <span>Digite o nome do objeto...</span>
+                    <i class="bi bi-search"></i>
+                </div>
+                <div class="separator my-3">ou</div>
+                <div class="d-grid">
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createObjectModal">Cadastrar Objeto Perdido</button>
+                </div>
+            </section>
+            
+            <hr class="my-4">
+
+            <!-- Seção: Cadastro de objetos (Achados) -->
+            <section class="mb-5">
+                <h5 class="fw-bold">Encontrou algum objeto na UNIRIO?</h5>
+                <div class="d-grid mt-3">
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createObjectModal">Cadastrar Objeto Achado</button>
+                </div>
+            </section>
+
+            <!-- Seção: Últimos Achados -->
+            <section class="mb-5">
+                <h2 class="fw-bold fs-4 mb-3">Últimos objetos achados</h2>
+                <div class="horizontal-scroll-container">
+                    <div class="card shadow-sm" onclick="showPage('page-objeto-detalhes')">
+                        <img src="https://picsum.photos/300/200?random=1" class="card-img-top" alt="Objeto achado">
+                        <div class="card-body">
+                            <h5 class="card-title">Garrafa Térmica</h5>
+                        </div>
+                        <div class="card-footer bg-success text-white">Achado</div>
+                    </div>
+                    <div class="card shadow-sm" onclick="showPage('page-objeto-detalhes')">
+                        <img src="https://picsum.photos/300/200?random=2" class="card-img-top" alt="Objeto achado">
+                        <div class="card-body">
+                            <h5 class="card-title">Livro de Cálculo</h5>
+                        </div>
+                        <div class="card-footer bg-success text-white">Achado</div>
+                    </div>
+                    <div class="card shadow-sm" onclick="showPage('page-objeto-detalhes')">
+                        <img src="https://picsum.photos/300/200?random=8" class="card-img-top" alt="Objeto achado">
+                        <div class="card-body">
+                            <h5 class="card-title">Guarda-chuva</h5>
+                        </div>
+                        <div class="card-footer bg-success text-white">Achado</div>
+                    </div>
+                    <div class="card shadow-sm bg-light text-center d-flex justify-content-center" onclick="showPage('page-objetos')">
+                        <div class="card-body">
+                            <h5 class="card-title">Ver todos</h5>
+                            <i class="bi bi-arrow-right-circle fs-1"></i>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seção: Últimos Perdidos -->
+            <section class="mb-5">
+                <h2 class="fw-bold fs-4 mb-3">Últimos objetos perdidos</h2>
+                <div class="horizontal-scroll-container">
+                    <div class="card shadow-sm" onclick="showPage('page-objeto-detalhes')">
+                        <img src="https://picsum.photos/300/200?random=3" class="card-img-top" alt="Objeto perdido">
+                        <div class="card-body">
+                            <h5 class="card-title">Chave de Carro</h5>
+                        </div>
+                        <div class="card-footer bg-warning text-dark">Perdido</div>
+                    </div>
+                    <div class="card shadow-sm" onclick="showPage('page-objeto-detalhes')">
+                        <img src="https://picsum.photos/300/200?random=4" class="card-img-top" alt="Objeto perdido">
+                        <div class="card-body">
+                            <h5 class="card-title">Fone de Ouvido</h5>
+                        </div>
+                        <div class="card-footer bg-warning text-dark">Perdido</div>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- TELA DE OBJETOS -->
+        <section id="page-objetos" class="page">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h1 class="fw-bold fs-4">Objetos Encontrados</h1>
+                <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#searchModal">
+                    <i class="bi bi-search"></i> Pesquisa Filtrada
+                </button>
+            </div>
+            <div class="row row-cols-2 row-cols-md-3 g-3">
+                <!-- Card de Objeto (Resumo) -->
+                <div class="col">
+                    <div class="card shadow-sm h-100" onclick="showPage('page-objeto-detalhes')">
+                        <img src="https://picsum.photos/300/200?random=5" class="card-img-top" alt="Objeto Achado">
+                        <div class="card-body">
+                            <h5 class="card-title">Garrafa Térmica</h5>
+                            <p class="card-text small text-muted">Encontrado na Biblioteca</p>
+                        </div>
+                        <div class="card-footer bg-success text-white">Achado</div>
+                    </div>
+                </div>
+                <!-- Outros cards... -->
+                <div class="col">
+                    <div class="card shadow-sm h-100" onclick="showPage('page-objeto-detalhes')">
+                        <img src="https://picsum.photos/300/200?random=6" class="card-img-top" alt="Objeto Perdido">
+                        <div class="card-body">
+                            <h5 class="card-title">Chave de Carro</h5>
+                            <p class="card-text small text-muted">Perdido perto do CCH</p>
+                        </div>
+                        <div class="card-footer bg-warning text-dark">Perdido</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TELA DE DETALHES DO OBJETO -->
+        <section id="page-objeto-detalhes" class="page">
+            <div class="mb-3">
+                <a href="#" onclick="goBack()" class="text-decoration-none fw-bold"><i class="bi bi-arrow-left"></i> Voltar</a>
+            </div>
+            <div class="card shadow-sm">
+                <img src="https://picsum.photos/600/400?random=7" class="card-img-top" alt="Objeto">
+                <div class="card-body">
+                    <span class="badge bg-success mb-2">Achado</span>
+                    <h2 class="card-title fw-bold">Garrafa Térmica</h2>
+                    <p class="card-text text-muted">Garrafa preta da marca Stanley, com alguns adesivos de bandas. Parece estar em bom estado.</p>
+                    <hr>
+                    <h5 class="fw-bold">Detalhes do Objeto</h5>
+                    <p><strong>Local Encontrado:</strong> Biblioteca Central</p>
+                    <p><strong>Data de Registro:</strong> 20/07/2025</p>
+                    <hr>
+                    <h5 class="fw-bold">Ações</h5>
+                    <div class="d-grid gap-2">
+                         <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#claimObjectModal">Reivindicar Objeto</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Seção de Comentários (Exemplo) -->
+            <div class="card shadow-sm mt-4">
+                <div class="card-body">
+                    <h5 class="fw-bold">Comentários</h5>
+                    <div class="d-flex mt-3">
+                        <img src="https://picsum.photos/40/40?random=9" class="rounded-circle me-3" alt="user">
+                        <div>
+                            <p class="mb-0"><strong>@maria_silva:</strong> Eu acho que vi essa garrafa perto do balcão de atendimento!</p>
+                            <small class="text-muted">20 de Julho de 2025, 15:30</small>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="input-group mt-3">
+                        <input type="text" class="form-control" placeholder="Adicione um comentário...">
+                        <button class="btn btn-outline-secondary" type="button">Enviar</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- TELA DE PAINEL DO ADMINISTRADOR -->
+        <section id="page-admin-panel" class="page">
+            <h1 class="fw-bold fs-4 mb-4">Painel do Administrador</h1>
+            
+            <h2 class="fw-bold fs-5 mb-3">Gerenciar Localizações</h2>
+            <div class="d-grid mb-4">
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#locationModal" onclick="configureLocationModal('create')">
+                    <i class="bi bi-plus-circle me-2"></i>Adicionar Nova Localização
+                </button>
+            </div>
+
+            <div class="accordion" id="locationsAccordion">
+                <!-- Área 1: CCH -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            Área: CCH
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#locationsAccordion">
+                        <div class="accordion-body">
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1">Biblioteca</h5>
+                                        <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#locationModal" onclick="configureLocationModal('edit', 'Biblioteca')">Editar</button>
+                                    </div>
+                                    <p class="mb-1">Funcionários responsáveis:</p>
+                                    <small class="d-flex justify-content-between align-items-center">
+                                        <span>- João da Silva (@joao.silva)</span>
+                                        <button class="btn btn-danger btn-sm py-0 px-1"><i class="bi bi-trash"></i></button>
+                                    </small>
+                                    <button class="btn btn-success btn-sm mt-2" data-bs-toggle="modal" data-bs-target="#employeeModal"><i class="bi bi-plus"></i> Adicionar Funcionário</button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- Área 2: CCET -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingTwo">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            Área: CCET
+                        </button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#locationsAccordion">
+                        <div class="accordion-body">
+                           <strong>Nenhuma localização cadastrada.</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- =================================================================
+    FOOTER (Hidden on login page)
+    ================================================================== -->
+    <footer class="bg-dark text-white mt-5">
+        <div class="container py-4">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h4 class="fw-bold">O que é o UniFinder?</h4>
+                    <p class="text-white-50">O UniFinder é um sistema de gerenciamento de objetos perdidos e achados, facilitando a conexão entre pessoas que perderam e encontraram itens.</p>
+                    <small>&copy; 2025 UniFinder. Todos os direitos reservados.</small>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- =================================================================
+    MODAIS
+    ================================================================== -->
+    <!-- Modal de Pesquisa Filtrada -->
+    <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold" id="searchModalLabel">Pesquisa Filtrada</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="filter-term" class="form-label">Pesquisar por termo</label>
+                            <input type="text" class="form-control" id="filter-term" placeholder="Ex: Chave, mochila preta...">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Tipo de objeto</label>
+                            <div>
+                                <input type="checkbox" class="btn-check" id="btn-check-perdido" autocomplete="off">
+                                <label class="btn btn-outline-primary" for="btn-check-perdido">Perdido</label>
+
+                                <input type="checkbox" class="btn-check" id="btn-check-achado" autocomplete="off">
+                                <label class="btn btn-outline-primary" for="btn-check-achado">Achado</label>
+                            </div>
+                        </div>
+                         <div class="mb-3">
+                            <label for="filter-location" class="form-label">Localização</label>
+                            <select class="form-select" id="filter-location">
+                                <option selected>Todas as localizações</option>
+                                <option value="1">Prédio do CCH</option>
+                                <option value="2">Prédio do CCET</option>
+                                <option value="3">Biblioteca</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Restaurar</button>
+                    <button type="button" class="btn btn-primary" onclick="showPage('page-objetos')">Aplicar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Cadastro de Objeto -->
+    <div class="modal fade" id="createObjectModal" tabindex="-1" aria-labelledby="createObjectModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold" id="createObjectModalLabel">Cadastrar Objeto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3"><label class="form-label">Você está cadastrando um objeto:</label><select class="form-select"><option>Achado</option><option>Perdido</option></select></div>
+                        <div class="mb-3"><label for="obj-name" class="form-label">Nome do objeto</label><input type="text" class="form-control" id="obj-name" placeholder="Ex: Chave de carro"></div>
+                        <div class="mb-3"><label for="obj-desc" class="form-label">Descrição</label><textarea class="form-control" id="obj-desc" rows="3"></textarea></div>
+                        <div class="mb-3"><label for="obj-photo" class="form-label">Foto do objeto</label><input class="form-control" type="file" id="obj-photo"></div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary">Cadastrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Reivindicação de Objeto -->
+    <div class="modal fade" id="claimObjectModal" tabindex="-1" aria-labelledby="claimObjectModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold" id="claimObjectModalLabel">Reivindicar Objeto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Você está reivindicando o objeto: <strong>Garrafa Térmica</strong></p>
+                    <form>
+                        <div class="mb-3">
+                            <label for="claim-desc" class="form-label">Descrição da reivindicação</label>
+                            <textarea class="form-control" id="claim-desc" rows="4" placeholder="Descreva por que você acredita que este objeto é seu. Forneça detalhes que só o dono saberia."></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="claim-files" class="form-label">Anexar imagens ou documentos (opcional)</label>
+                            <input class="form-control" type="file" id="claim-files">
+                        </div>
+                        <div class="mb-3">
+                            <label for="claim-contact" class="form-label">Seus dados de contato</label>
+                            <input type="text" class="form-control" id="claim-contact" placeholder="Ex: email@exemplo.com ou (21) 99999-9999">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary">Enviar Reivindicação</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Cadastro/Modificação de Localização -->
+    <div class="modal fade" id="locationModal" tabindex="-1" aria-labelledby="locationModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold" id="locationModalLabel">Adicionar Localização</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="locationName" class="form-label">Nome da Localização</label>
+                            <input type="text" class="form-control" id="locationName" placeholder="Ex: Auditório" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="locationArea" class="form-label">Área</label>
+                            <select class="form-select" id="locationArea">
+                                <option value="cch">CCH</option>
+                                <option value="ccet">CCET</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="locationModalSaveButton">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Cadastro de Funcionário -->
+    <div class="modal fade" id="employeeModal" tabindex="-1" aria-labelledby="employeeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold" id="employeeModalLabel">Adicionar Funcionário</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="employeeSearch" class="form-label">Pesquisar por Usuário/Email</label>
+                            <input type="text" class="form-control" id="employeeSearch" placeholder="Ex: joao.silva">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary">Adicionar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JS for navigation -->
+    <script>
+        let currentPage = 'page-inicial';
+        let previousPage = 'page-inicial';
+
+        const mainHeader = document.querySelector('header');
+        const mainFooter = document.querySelector('footer');
+
+        // Function to show a page and hide others
+        function showPage(pageId) {
+            // Track history for the back button
+            if (currentPage !== pageId) {
+                previousPage = currentPage;
+                currentPage = pageId;
+            }
+
+            // Show/hide main layout elements based on page
+            if (pageId === 'page-login') {
+                mainHeader.style.display = 'none';
+                mainFooter.style.display = 'none';
+                document.querySelector('main').classList.remove('container');
+            } else {
+                mainHeader.style.display = 'block';
+                mainFooter.style.display = 'block';
+                document.querySelector('main').classList.add('container');
+            }
+
+            // Hide all page sections
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+
+            // Show the requested page
+            const pageToShow = document.getElementById(pageId);
+            if (pageToShow) {
+                pageToShow.classList.add('active');
+            }
+
+            // Close any open modals
+            const searchModalEl = document.getElementById('searchModal');
+            const searchModalInstance = bootstrap.Modal.getInstance(searchModalEl);
+            if (searchModalInstance) {
+                searchModalInstance.hide();
+            }
+
+            // Close the offcanvas menu if it's open
+            const offcanvasElement = document.getElementById('offcanvasNavbar');
+            const offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
+            if (offcanvas) {
+                offcanvas.hide();
+            }
+        }
+
+        // Function to go back to the previous page
+        function goBack() {
+            showPage(previousPage);
+        }
+
+        // Function to configure the location modal for either 'create' or 'edit' mode
+        function configureLocationModal(mode, locationName = '') {
+            const modalTitle = document.getElementById('locationModalLabel');
+            const modalButton = document.getElementById('locationModalSaveButton');
+            const locationNameInput = document.getElementById('locationName');
+
+            if (mode === 'edit') {
+                modalTitle.textContent = 'Modificar Localização';
+                modalButton.textContent = 'Salvar Alterações';
+                locationNameInput.value = locationName;
+            } else {
+                modalTitle.textContent = 'Adicionar Nova Localização';
+                modalButton.textContent = 'Salvar';
+                locationNameInput.value = '';
+            }
+        }
+
+        // Set the initial page to be visible
+        document.addEventListener('DOMContentLoaded', function() {
+            showPage('page-inicial');
+        });
+    </script>
+</body>
+</html>
